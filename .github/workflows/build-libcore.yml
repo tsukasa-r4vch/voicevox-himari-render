@@ -1,38 +1,39 @@
-name: Build libvoicevox_core.so (CPU Only)
+name: Build VOICEVOX Core for Linux
 
 on:
   workflow_dispatch:
+  push:
+    branches: [main]
 
 jobs:
-  build:
+  build-libcore:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-    - name: Install Rust
-      uses: dtolnay/rust-toolchain@stable
-      with:
-        toolchain: stable
+      - name: Set up Rust
+        uses: actions/setup-rust@v1
+        with:
+          rust-version: stable
 
-    - name: Install dependencies
-      run: sudo apt-get update && sudo apt-get install -y clang cmake libssl-dev pkg-config protobuf-compiler
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang cmake libssl-dev pkg-config
 
-    - name: Clone voicevox_core
-      run: |
-        git clone --depth=1 https://github.com/VOICEVOX/voicevox_core.git
+      - name: Build libvoicevox_core.so
+        working-directory: voicevox_core
+        run: |
+          cargo build --release
 
-    - name: Build libvoicevox_core.so
-      working-directory: voicevox_core
-      run: |
-        cargo build --release -p voicevox_core --features directml
+      - name: Copy built library to workspace root
+        run: |
+          cp voicevox_core/target/release/libvoicevox_core.so ./libvoicevox_core.so
 
-    - name: Copy built library to workspace root
-      run: |
-        cp voicevox_core/crates/voicevox_core/target/release/libvoicevox_core.so ./libvoicevox_core.so
-
-    - name: Upload artifact
-      uses: actions/upload-artifact@v4
-      with:
-        name: libvoicevox_core
-        path: libvoicevox_core.so
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: libvoicevox_core
+          path: libvoicevox_core.so
