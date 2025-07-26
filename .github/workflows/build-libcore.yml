@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
 
       - name: List workspace files (debug)
-        run: ls -la crates/voicevox_core
+        run: ls -la crates
 
       - name: Set up Rust using dtolnay/rust-toolchain
         uses: dtolnay/rust-toolchain@master
