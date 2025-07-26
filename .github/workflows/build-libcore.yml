@@ -1,0 +1,38 @@
+name: Build libcore.so (CPU only)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout voicevox_core
+        uses: actions/checkout@v4
+        with:
+          repository: VOICEVOX/voicevox_core
+          path: voicevox_core
+
+      - name: Install dependencies
+        run: |
+          sudo apt update
+          sudo apt install -y build-essential cmake clang pkg-config libssl-dev
+
+      - name: Set up Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          components: rustc, cargo
+
+      - name: Build libcore.so (CPU only)
+        working-directory: voicevox_core
+        run: |
+          cargo build --release --package voicevox_core --features directml-disable
+          mkdir -p output
+          cp target/release/libcore.so output/
+
+      - name: Upload libcore.so
+        uses: actions/upload-artifact@v4
+        with:
+          name: libcore-cpu
+          path: voicevox_core/output/libcore.so
