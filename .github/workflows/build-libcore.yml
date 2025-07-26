@@ -10,18 +10,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
+      - name: Checkout your repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: List workspace files (debug)
-        run: ls -la ./
+      - name: Clone voicevox_core repository
+        run: |
+          git clone https://github.com/VOICEVOX/voicevox_core.git
 
-      - name: Set up Rust using dtolnay/rust-toolchain
-        uses: dtolnay/rust-toolchain@master
+      - name: Set up Rust toolchain
+        uses: actions-rs/toolchain@v1
         with:
           toolchain: stable
+          override: true
 
       - name: Install dependencies
         run: |
@@ -29,10 +29,12 @@ jobs:
           sudo apt-get install -y clang cmake libssl-dev pkg-config
 
       - name: Build libvoicevox_core.so
-        run: cargo build --release --manifest-path crates/voicevox_core/Cargo.toml
+        run: |
+          cargo build --release --manifest-path voicevox_core/Cargo.toml
 
       - name: Copy built library to workspace root
-        run: cp crates/voicevox_core/target/release/libvoicevox_core.so ./libvoicevox_core.so
+        run: |
+          cp voicevox_core/target/release/libvoicevox_core.so ./libvoicevox_core.so
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
