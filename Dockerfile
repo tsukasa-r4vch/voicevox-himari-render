@@ -1,8 +1,8 @@
-# 公式VOICEVOXエンジンのCPU用イメージをベースにする
+# ベースは公式 IMAGE
 FROM voicevox/voicevox_engine:cpu-latest
 
-# 必要ポート開放
+# ポート開放
 EXPOSE 50021
 
-# Renderの起動コマンドに依存せず、ここで定義
-CMD ["/opt/voicevox_engine/run.sh"]
+# Renderでは CMD を指定不要ですが、念のため補助
+CMD ["voicevox_engine"]
