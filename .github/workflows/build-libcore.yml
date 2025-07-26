@@ -16,7 +16,7 @@ jobs:
           fetch-depth: 0
 
       - name: List workspace files (debug)
-        run: ls -la crates
+        run: ls -la ./
 
       - name: Set up Rust using dtolnay/rust-toolchain
         uses: dtolnay/rust-toolchain@master
