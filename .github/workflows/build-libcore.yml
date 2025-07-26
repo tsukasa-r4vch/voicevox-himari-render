@@ -27,7 +27,7 @@ jobs:
       - name: Build libcore.so (CPU only)
         working-directory: voicevox_core
         run: |
-          cargo build --release --package voicevox_core --features directml-disable
+          cargo build --release --package voicevox_core
           mkdir -p output
           cp target/release/libcore.so output/
 
