@@ -27,7 +27,7 @@ jobs:
       - name: Build libcore.so (CPU only)
         working-directory: voicevox_core
         run: |
-          cargo build --release --package voicevox_core
+          cargo build --release --package voicevox_core --features load-onnxruntime
           mkdir -p output
           cp target/release/libcore.so output/
 
