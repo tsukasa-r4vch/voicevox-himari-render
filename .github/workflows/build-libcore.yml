@@ -25,12 +25,10 @@ jobs:
 
       - name: Build libvoicevox_core.so
         working-directory: crates/voicevox_core
-        run: |
-          cargo build --release
+        run: cargo build --release
 
       - name: Copy built library to workspace root
-        run: |
-          cp voicevox_core/target/release/libvoicevox_core.so ./libvoicevox_core.so
+        run: cp crates/voicevox_core/target/release/libvoicevox_core.so ./libvoicevox_core.so
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
