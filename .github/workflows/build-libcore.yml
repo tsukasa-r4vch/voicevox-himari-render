@@ -18,6 +18,10 @@ jobs:
     - name: Install dependencies
       run: sudo apt-get update && sudo apt-get install -y clang cmake libssl-dev pkg-config protobuf-compiler
 
+    - name: Clone voicevox_core
+      run: |
+        git clone --depth=1 https://github.com/VOICEVOX/voicevox_core.git
+
     - name: Build libvoicevox_core.so
       working-directory: voicevox_core
       run: |
